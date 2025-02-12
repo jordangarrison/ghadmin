@@ -18,7 +18,31 @@ A powerful command-line tool for managing GitHub organizations, teams, and membe
 
 ## Installation
 
-### Download Binary
+### Quick Install (Recommended)
+
+Requirements:
+
+- [Devbox](https://www.jetify.com/docs/devbox/)
+- Git
+
+```bash
+# Clone the repository
+git clone https://github.com/jordan.garrison/ghadmin.git
+cd ghadmin
+
+# Install using Devbox
+devbox install
+```
+
+This will:
+
+1. Compile the binary
+2. Install it globally as `ghadmin`
+3. Make it available in your PATH
+
+### Manual Installation
+
+#### Download Binary
 
 1. Visit the [Releases](https://github.com/jordan.garrison/ghadmin/releases) page
 2. Download the appropriate binary for your platform:
@@ -38,7 +62,7 @@ A powerful command-line tool for managing GitHub organizations, teams, and membe
    sudo mv ghadmin-* /usr/local/bin/ghadmin
    ```
 
-### Build from Source
+#### Build from Source
 
 Requirements:
 
@@ -52,6 +76,9 @@ cd ghadmin
 
 # Build using Devbox
 devbox run compile
+
+# Optional: Install globally
+devbox run install
 ```
 
 ## Configuration

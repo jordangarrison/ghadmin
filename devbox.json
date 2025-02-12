@@ -5,6 +5,10 @@
     "init_hook": ["echo 'Welcome to devbox!' > /dev/null"],
     "scripts": {
       "test": ["echo \"Error: no test specified\" && exit 1"],
+      "install": [
+        "devbox run compile",
+        "deno install --allow-net --allow-env --allow-read -g --name ghadmin -c deno.json -f main.ts"
+      ],
       "compile": [
         "mkdir -p dist",
         "deno compile --allow-net --allow-env --allow-read --output dist/ghadmin main.ts"
