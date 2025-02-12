@@ -8,17 +8,12 @@ import {
 
 const octokit = new Octokit(githubConfig);
 
-export const command = 'create <org> <n>';
+export const command = 'create <org> <name>';
 export const desc = 'Create a new team';
 
 export const builder = {
   org: {
     describe: 'GitHub organization name',
-    type: 'string',
-    demandOption: true,
-  },
-  name: {
-    describe: 'Team name',
     type: 'string',
     demandOption: true,
   },
