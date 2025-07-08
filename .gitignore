@@ -8,6 +8,11 @@
 # DevBox
 .devbox/
 
+# Nix
+result
+result-*
+.direnv/
+
 # OS specific
 .DS_Store
 Thumbs.db
