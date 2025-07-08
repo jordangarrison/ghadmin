@@ -22,23 +22,27 @@ A powerful command-line tool for managing GitHub organizations, teams, and membe
 
 Requirements:
 
-- [Devbox](https://www.jetify.com/docs/devbox/)
+- [Nix](https://nixos.org/download.html) with flakes enabled
 - Git
 
 ```bash
 # Clone the repository
-git clone https://github.com/jordan.garrison/ghadmin.git
+git clone https://github.com/jordangarrison/ghadmin.git
 cd ghadmin
 
-# Install using Devbox
-devbox install
+# Run directly with Nix
+nix run .
+
+# Or build and install
+nix build
+./result/bin/ghadmin
 ```
 
-This will:
+To enable Nix flakes (if not already enabled):
 
-1. Compile the binary
-2. Install it globally as `ghadmin`
-3. Make it available in your PATH
+```bash
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+```
 
 ### Manual Installation
 
@@ -62,23 +66,41 @@ This will:
    sudo mv ghadmin-* /usr/local/bin/ghadmin
    ```
 
-#### Build from Source
+#### Build from Source with Nix
 
 Requirements:
 
-- [Devbox](https://www.jetify.com/docs/devbox/)
+- [Nix](https://nixos.org/download.html) with flakes enabled
 - Git
 
 ```bash
 # Clone the repository
-git clone https://github.com/jordan.garrison/ghadmin.git
+git clone https://github.com/jordangarrison/ghadmin.git
 cd ghadmin
 
-# Build using Devbox
-devbox run compile
+# Build main package (uses Deno runtime)
+nix build
 
-# Optional: Install globally
-devbox run install
+# Build platform-specific compiled binaries
+nix build .#ghadmin-linux-x64    # Linux x64
+nix build .#ghadmin-macos-arm64  # macOS Apple Silicon
+nix build .#ghadmin-all          # All platforms
+```
+
+#### Legacy: Build with Deno directly
+
+Requirements:
+
+- [Deno](https://deno.land/) 1.40+
+- Git
+
+```bash
+# Clone the repository
+git clone https://github.com/jordangarrison/ghadmin.git
+cd ghadmin
+
+# Compile for current platform
+deno compile --allow-net --allow-env --allow-read --output ghadmin main.ts
 ```
 
 ## Configuration
@@ -145,51 +167,58 @@ ghadmin teams list <org> --format=table
 
 ### Prerequisites
 
-- [Devbox](https://www.jetify.com/docs/devbox/)
+- [Nix](https://nixos.org/download.html) with flakes enabled
 - Git
+- [direnv](https://direnv.net/) (optional but recommended)
 
 ### Setup
 
 ```bash
 # Clone the repository
-git clone https://github.com/jordan.garrison/ghadmin.git
+git clone https://github.com/jordangarrison/ghadmin.git
 cd ghadmin
 
-# Enter Devbox shell
-devbox shell
+# Option 1: Use direnv (automatically loads environment)
+# Just cd into the directory if direnv is set up
+
+# Option 2: Enter Nix development shell manually
+nix develop
 ```
 
-### Available Scripts
+### Available Commands
 
 ```bash
-# Compile for current platform
-devbox run compile
+# Run the application
+nix run .                    # Run with Nix
+deno run --allow-net --allow-env --allow-read main.ts  # Run directly with Deno
 
-# Compile for all platforms
-devbox run compile:all
+# Build packages
+nix build                    # Build main package
+nix build .#ghadmin-all      # Build all platform binaries
 
-# Run tests
-devbox run test
+# In development shell, use convenience functions:
+compile                      # Compile for current platform
+compile-all                  # Compile for all platforms
+test                         # Run tests
 ```
 
 ### Platform-Specific Builds
 
 ```bash
-# Linux (x64)
-devbox run compile:linux:x64
+# Individual platform builds
+nix build .#ghadmin-linux-x64       # Linux x64
+nix build .#ghadmin-linux-arm64     # Linux ARM64
+nix build .#ghadmin-macos-x64       # macOS Intel
+nix build .#ghadmin-macos-arm64     # macOS Apple Silicon
+nix build .#ghadmin-windows-x64     # Windows x64
 
-# Linux (ARM64)
-devbox run compile:linux:arm64
-
-# macOS (Intel)
-devbox run compile:macos:x64
-
-# macOS (Apple Silicon)
-devbox run compile:macos:arm64
-
-# Windows
-devbox run compile:windows:x64
+# Build all platforms at once
+nix build .#ghadmin-all
 ```
+
+### Migration from Devbox
+
+If you're migrating from the previous devbox setup, see [MIGRATION.md](MIGRATION.md) for detailed instructions.
 
 ## Contributing
 
